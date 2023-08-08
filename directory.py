@@ -1,5 +1,6 @@
 import sys
 import re
+import json
 
 
 def add_phonebook_entry(phonebook):
@@ -24,15 +25,16 @@ def remove_phonebook_entry(phonebook, name):
 
 
 def search_phonebook_entry(phonebook, name):
-    search_queries_dict = {}
+    search_json_array = []
     for i in phonebook.keys():
         if name in i:
-            search_queries_dict[i] = phonebook[i]
-    if len(search_queries_dict) == 0:
+            search_json_array.append({'name': i, 'phone_number': phonebook[i]})
+            js = json.dumps(search_json_array)
+    if len(search_json_array) == 0:
         print("Name not found")
     else:
-        print(search_queries_dict)
-    return search_queries_dict
+        print(js)
+    return js
 
 
 def is_valid(mobile_number):
@@ -41,7 +43,8 @@ def is_valid(mobile_number):
 
 
 def display_menu():
-    entry = int(input("What do you want to do? \n 1.Add a new entry \n 2.Remove an entry \n 3.Search an entry"))
+    entry = int(input("What do you want to do? \n 1.Add a new entry \n 2.Remove an entry \n 3.Search an entry "
+                      "\n 4.Exit"))
     return entry
 
 
@@ -58,3 +61,5 @@ while choice is not None and choice in range(1, 4):
     elif choice == 3:
         name = input("Please enter name to be searched:")
         search_phonebook_entry(phonebook, name)
+    else:
+        sys.exit("Exiting")
